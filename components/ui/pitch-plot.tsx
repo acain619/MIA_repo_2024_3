@@ -60,6 +60,7 @@ const PitchPlot = React.forwardRef<
       SI: "#800080",
       FC: "#00CC00",
       ST: "#FF66FF",
+      SV: "#A9A9A9",
       Default: "#000000",
     }),
     []
