@@ -40,18 +40,18 @@ type PitchPlotPitch = {
  */
 type PitchPlotProps = {
   pitches: PitchPlotPitch[];
-  onPitchClick?: (pitch: PitchPlotPitch) => void;
+  on_pitch_click?: (pitch: PitchPlotPitch) => void;
 };
 
 const PitchPlot = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & PitchPlotProps
->(({ className, pitches, onPitchClick, ...props }, ref) => {
-  const [selectedPitch, setSelectedPitch] = useState<PitchPlotPitch | null>(
+>(({ className, pitches, on_pitch_click, ...props }, ref) => {
+  const [selected_pitch, set_selected_pitch] = useState<PitchPlotPitch | null>(
     null
   );
 
-  const pitchColors = useMemo(
+  const pitch_colors = useMemo(
     () => ({
       FF: "#FF0000",
       CU: "#0000FF",
@@ -87,16 +87,17 @@ const PitchPlot = React.forwardRef<
     height: strikeZone.height + baseballDiameter * 2,
   };
 
-  const getPitchTypeColor = (pitchType: string) => {
+  const get_pitch_type_color = (pitch_type: string) => {
     return (
-      pitchColors[pitchType as keyof typeof pitchColors] || pitchColors.Default
+      pitch_colors[pitch_type as keyof typeof pitch_colors] ||
+      pitch_colors.Default
     );
   };
 
-  const singlePitchClick = (pitch: PitchPlotPitch) => {
-    setSelectedPitch(pitch);
-    if (onPitchClick) {
-      onPitchClick(pitch);
+  const single_pitch_click = (pitch: PitchPlotPitch) => {
+    set_selected_pitch(pitch);
+    if (on_pitch_click) {
+      on_pitch_click(pitch);
     }
   };
 
@@ -114,9 +115,9 @@ const PitchPlot = React.forwardRef<
                 key={p.pitch_id}
                 cx={p.location_x}
                 cy={height - p.location_z}
-                fill={getPitchTypeColor(p.pitch_type)}
+                fill={get_pitch_type_color(p.pitch_type)}
                 r={baseballDiameter / 2}
-                onClick={() => singlePitchClick(p)}
+                onClick={() => single_pitch_click(p)}
                 style={{ cursor: "pointer" }}
               />
             );
@@ -146,41 +147,41 @@ const PitchPlot = React.forwardRef<
         <span className="text-xs italic">Pitcher perspective</span>
       </div>
       <div className={`rounded-xl bg-white mt-4 shadow-sm p-4`}>
-        {selectedPitch ? (
+        {selected_pitch ? (
           <div id="pitchInfo">
             <h3 className="text-lg font-semibold mb-2">Pitch Information</h3>
             <p>
-              <b>Batter:</b> {selectedPitch.batter_name}
+              <b>Batter:</b> {selected_pitch.batter_name}
             </p>
             <p>
-              <b>Batter Stance:</b> {selectedPitch.batter_stance}
+              <b>Batter Stance:</b> {selected_pitch.batter_stance}
             </p>
             <p>
-              <b>Pitch Type:</b> {selectedPitch.pitch_type}
+              <b>Pitch Type:</b> {selected_pitch.pitch_type}
             </p>
             <p>
-              <b>Velocity:</b> {selectedPitch.velocity} mph
+              <b>Velocity:</b> {selected_pitch.velocity} mph
             </p>
             <p>
-              <b>Spin Rate:</b> {selectedPitch.spin_rate} rpm
+              <b>Spin Rate:</b> {selected_pitch.spin_rate} rpm
             </p>
             <p>
-              <b>H Rel Point:</b> {selectedPitch.release_location_x}
+              <b>H Rel Point:</b> {selected_pitch.release_location_x}
             </p>
             <p>
-              <b>V Rel Point:</b> {selectedPitch.release_location_z}
+              <b>V Rel Point:</b> {selected_pitch.release_location_z}
             </p>
             <p>
-              <b>In Play?:</b> {selectedPitch.is_in_play ? "Yes" : "No"}
+              <b>In Play?:</b> {selected_pitch.is_in_play ? "Yes" : "No"}
             </p>
             <p>
-              <b>Swing?:</b> {selectedPitch.is_swing ? "Yes" : "No"}
+              <b>Swing?:</b> {selected_pitch.is_swing ? "Yes" : "No"}
             </p>
             <p>
-              <b>Contact?:</b> {selectedPitch.is_contact ? "Yes" : "No"}
+              <b>Contact?:</b> {selected_pitch.is_contact ? "Yes" : "No"}
             </p>
             <p>
-              <b>Result:</b> {selectedPitch.play_result}
+              <b>Result:</b> {selected_pitch.play_result}
             </p>
           </div>
         ) : (
@@ -190,7 +191,7 @@ const PitchPlot = React.forwardRef<
       <div className="mt-4">
         <h4 className="text-md font-semibold mb-2">Pitch Type Legend</h4>
         <div className="flex flex-wrap gap-2">
-          {Object.entries(pitchColors).map(([type, color]) => (
+          {Object.entries(pitch_colors).map(([type, color]) => (
             <div key={type} className="flex items-center">
               <div
                 className="w-4 h-4 rounded-full mr-1"

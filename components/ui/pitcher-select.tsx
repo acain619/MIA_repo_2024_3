@@ -9,15 +9,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function PitcherSelect({ pitchers, currentPitcherId }) {
+export default function PitcherSelect({ pitchers, current_pitcher_id }) {
   const router = useRouter();
 
-  const handlePitcherChange = (value) => {
+  const is_pitcher_change = (value) => {
     router.push(`/pitcher/${value}`);
   };
 
   return (
-    <Select onValueChange={handlePitcherChange} value={currentPitcherId}>
+    <Select onValueChange={is_pitcher_change} value={current_pitcher_id}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a pitcher" />
       </SelectTrigger>

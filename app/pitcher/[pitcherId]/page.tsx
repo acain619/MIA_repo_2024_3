@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/select";
 import PitcherInfo from "../../../components/ui/player-info";
 import { PitchPlot } from "../../../components/ui/pitch-plot";
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 /**
  *
  * If you would like to display the pitcher's image, you can use the image hosted at
@@ -18,69 +18,75 @@ import { useParams } from 'next/navigation';
  *
  */
 export default function Page() {
-  const urlParams = useParams();
-  const urlID = urlParams.pitcherId
-  const [pitcherId, setPitcherId] = useState(urlID);
-  const [pitches_json, setPitchesJson] = useState('');
-  const [pitchers_json, setPitchersJson] = useState({ pitchers: [] });
+  const url_params = useParams();
+  const url_id = url_params.pitcherId;
+  const [pitcher_id, set_pitcher_id] = useState(url_id);
+  const [pitches_json, set_pitches_json] = useState("");
+  const [pitchers_json, set_pitchers_json] = useState({ pitchers: [] });
 
   useEffect(() => {
-    const initialPitcherId = urlParams.pitcherId;
-    setPitcherId(initialPitcherId);
-  }, [urlParams.pitcherId]);
+    const initial_pitcher_id = url_params.pitcherId;
+    set_pitcher_id(initial_pitcher_id);
+  }, [url_params.pitcherId]);
 
   useEffect(() => {
     const getPitchersAll = async () => {
       try {
-        let pitchers_data = await fetch(`https://mia-api.vercel.app/api/pitchers`);
+        let pitchers_data = await fetch(
+          `https://mia-api.vercel.app/api/pitchers`
+        );
         let pitchers_json = await pitchers_data.json();
-        setPitchersJson(pitchers_json);
+        set_pitchers_json(pitchers_json);
       } catch (error) {
-        console.log("pitchers error...");
         console.error("Error fetching pitchers:", error);
-        setPitchersJson({ pitchers: [] });
+        set_pitchers_json({ pitchers: [] });
       }
     };
-  
+
     getPitchersAll();
   }, []);
 
   useEffect(() => {
     const getPitches = async () => {
-      if (pitcherId) {
+      if (pitcher_id) {
         let pitches_data = await fetch(
-          `https://mia-api.vercel.app/api/pitches?pitcherId=${pitcherId}`
+          `https://mia-api.vercel.app/api/pitches?pitcherId=${pitcher_id}`
         );
         let pitches_json = await pitches_data.json();
-        setPitchesJson(pitches_json);
+        set_pitches_json(pitches_json);
       }
     };
 
     getPitches();
-  }, [pitcherId]);
+  }, [pitcher_id]);
 
-  const pitcherChanged = (value) => {
-    setPitcherId(value)
+  const pitcher_changed = (value) => {
+    set_pitcher_id(value);
   };
 
   return (
     <div className="mb-4 grid-container">
       <div className="align-items-center">
-        <Select value={pitcherId} onValueChange={pitcherChanged}>
+        <Select value={pitcher_id} onValueChange={pitcher_changed}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Choose a pitcher..." />
           </SelectTrigger>
           <SelectContent>
-            {pitchers_json.pitchers.length > 0 && pitchers_json.pitchers.map((pitcher) => (
-              <SelectItem key={pitcher.id} value={pitcher.id}>
-                {pitcher.name}
-              </SelectItem>
-            ))}
+            {pitchers_json.pitchers.length > 0 &&
+              pitchers_json.pitchers.map((pitcher) => (
+                <SelectItem key={pitcher.id} value={pitcher.id}>
+                  {pitcher.name}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
       </div>
-      {pitcherId ? <PitcherInfo pitcherId={pitcherId} /> : "" }
-      {pitches_json.pitches ? <PitchPlot className="w-64" pitches={pitches_json.pitches} /> : "Waiting for Pitcher Selection..." }
+      {pitcher_id ? <PitcherInfo pitcher_id={pitcher_id} /> : ""}
+      {pitches_json.pitches ? (
+        <PitchPlot className="w-64" pitches={pitches_json.pitches} />
+      ) : (
+        "Waiting for Pitcher Selection..."
+      )}
     </div>
   );
 }
