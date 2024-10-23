@@ -12,7 +12,7 @@ import {
 export default function PitcherSelect({ pitchers, current_pitcher_id }) {
   const router = useRouter();
 
-  const is_pitcher_change = (value) => {
+  const is_pitcher_change = (value:string) => {
     router.push(`/pitcher/${value}`);
   };
 

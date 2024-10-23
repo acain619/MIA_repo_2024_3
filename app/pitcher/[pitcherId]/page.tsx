@@ -20,22 +20,23 @@ import { useParams } from "next/navigation";
 export default function Page() {
   const url_params = useParams();
   const url_id = url_params.pitcherId;
-  const [pitcher_id, set_pitcher_id] = useState(url_id);
+  const [pitcher_id, set_pitcher_id] = useState<string | undefined>(
+    Array.isArray(url_id) ? url_id[0] : url_id
+  );
   const [pitches_json, set_pitches_json] = useState("");
   const [pitchers_json, set_pitchers_json] = useState({ pitchers: [] });
 
   useEffect(() => {
     const initial_pitcher_id = url_params.pitcherId;
-    set_pitcher_id(initial_pitcher_id);
+    set_pitcher_id(Array.isArray(initial_pitcher_id) ? initial_pitcher_id[0] : initial_pitcher_id);
   }, [url_params.pitcherId]);
-
   useEffect(() => {
     const getPitchersAll = async () => {
       try {
-        let pitchers_data = await fetch(
+        const pitchers_data = await fetch(
           `https://mia-api.vercel.app/api/pitchers`
         );
-        let pitchers_json = await pitchers_data.json();
+        const pitchers_json = await pitchers_data.json();
         set_pitchers_json(pitchers_json);
       } catch (error) {
         console.error("Error fetching pitchers:", error);
@@ -49,10 +50,10 @@ export default function Page() {
   useEffect(() => {
     const getPitches = async () => {
       if (pitcher_id) {
-        let pitches_data = await fetch(
+        const pitches_data = await fetch(
           `https://mia-api.vercel.app/api/pitches?pitcherId=${pitcher_id}`
         );
-        let pitches_json = await pitches_data.json();
+        const pitches_json = await pitches_data.json();
         set_pitches_json(pitches_json);
       }
     };
@@ -60,8 +61,8 @@ export default function Page() {
     getPitches();
   }, [pitcher_id]);
 
-  const pitcher_changed = (value) => {
-    set_pitcher_id(value);
+  const pitcher_changed = (pitcher_value: string) => {
+    set_pitcher_id(pitcher_value);
   };
 
   return (
@@ -74,16 +75,16 @@ export default function Page() {
           <SelectContent>
             {pitchers_json.pitchers.length > 0 &&
               pitchers_json.pitchers.map((pitcher) => (
-                <SelectItem key={pitcher.id} value={pitcher.id}>
-                  {pitcher.name}
+                <SelectItem key={pitcher["id"]} value={pitcher["id"]}>
+                  {pitcher["name"]}
                 </SelectItem>
               ))}
           </SelectContent>
         </Select>
       </div>
       {pitcher_id ? <PitcherInfo pitcher_id={pitcher_id} /> : ""}
-      {pitches_json.pitches ? (
-        <PitchPlot className="w-64" pitches={pitches_json.pitches} />
+      {pitches_json["pitches"] ? (
+        <PitchPlot className="w-64" pitches={pitches_json["pitches"]} />
       ) : (
         "Waiting for Pitcher Selection..."
       )}

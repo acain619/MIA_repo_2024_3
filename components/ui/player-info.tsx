@@ -33,31 +33,31 @@ function PitcherInfo({ pitcher_id }) {
         <img
           src={`https://img.mlbstatic.com/mlb-photos/image/upload/v1/people/${pitcher_id}/headshot/silo/current`}
           className="w-16 rounded-xl bg-white"
-          alt={pitcher_info.name}
+          alt={pitcher_info["name"]}
         />
         <div className="text-white text-2xl font-wide">
-          <div className="uppercase">{pitcher_info.name}</div>
+          <div className="uppercase">{pitcher_info["name"]}</div>
         </div>
       </div>
       <div className="p-4 grid grid-cols-3 gap-x-4 gap-y-2 text-sm">
         <div className="col-span-1 grid grid-cols-2">
           <span className="text-[#5E6291]">Pos</span>
-          <span>{pitcher_info.pitcher_position}</span>
+          <span>{pitcher_info["pitcher_position"]}</span>
         </div>
         <div className="col-span-1 grid grid-cols-2">
           <span className="text-[#5E6291]">Org</span>
           <span>
-            {pitcher_info.organization_name} (
-            {pitcher_info.organization_abbreviation})
+            {pitcher_info["organization_name"]} (
+            {pitcher_info["organization_abbreviation"]})
           </span>
         </div>
         <div className="col-span-1 grid grid-cols-2">
           <span className="text-[#5E6291]">Stance</span>
-          <span>{pitcher_info.pitcher_stance}</span>
+          <span>{pitcher_info["pitcher_stance"]}</span>
         </div>
         <div className="col-span-1 grid grid-cols-2">
           <span className="text-[#5E6291]">DOB</span>
-          <span>{pitcher_info.pitcher_birth_date}</span>
+          <span>{pitcher_info["pitcher_birth_date"]}</span>
         </div>
       </div>
     </div>
